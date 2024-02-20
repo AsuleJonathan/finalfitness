@@ -1,24 +1,60 @@
 version: 2.1
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: asulejona/fitness-tracking
+    docker:
+      - image: cimg/openjdk:17.0.9-node
+    
 
 jobs:
   build:
-    docker:
-      - image: circleci/openjdk:8-jdk  # Using Java 8 image
-
-    working_directory: ~/app  # Set your project directory
-
+    executor: docker-publisher
     steps:
-      - checkout  # Check out the code from the repository
-
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Set up JDK 8
+          name: Build Docker Image
           command: |
-            sudo update-java-alternatives -s java-1.8.0-openjdk-amd64
-
+            docker build -t $IMAGE_NAME:latest .
       - run:
-          name: Install dependencies and build
-          command: mvn clean install  # Use Maven to clean and install dependencies
-
+          name: Archive Docker Image
+          command: docker save -o image.tar $IMAGE_NAME
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./image.tar
+  publish-latest:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Run tests
-          command: mvn test  # Run tests using Maven
+          name: Load archived Docker
+          command: docker load -i /tmp/workspace/image.tar
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            IMAGE_TAG="0.0.${CIRCLE_BUILD_NUM}"
+            docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
+            docker push $IMAGE_NAME:latest
+            docker push $IMAGE_NAME:$IMAGE_TAG
+
+workflows:
+  version: 2
+  build-main:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: main
+      - publish-latest:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
