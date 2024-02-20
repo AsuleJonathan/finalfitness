@@ -4,6 +4,6 @@ services:
   fitness-tracking:
     image: asulejona/fitness-tracking:latest
     ports:
-      - "8082:8082"
+      - "8081:8081"
     restart: always
 

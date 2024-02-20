@@ -1,0 +1,21 @@
+[debug] [2024-02-20T13:11:47.720Z] ----------------------------------------------------------------------
+[debug] [2024-02-20T13:11:47.726Z] Command:       /usr/local/bin/firebase /home/jonathan/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase init
+[debug] [2024-02-20T13:11:47.727Z] CLI Version:   13.3.0
+[debug] [2024-02-20T13:11:47.728Z] Platform:      linux
+[debug] [2024-02-20T13:11:47.729Z] Node Version:  v18.5.0
+[debug] [2024-02-20T13:11:47.730Z] Time:          Tue Feb 20 2024 16:11:47 GMT+0300 (East Africa Time)
+[debug] [2024-02-20T13:11:47.730Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-02-20T13:11:47.748Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-02-20T13:11:47.749Z] > authorizing via signed-in user (asulejona@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /home/jonathan/Desktop/Gym-Website/FitnessTracking
+

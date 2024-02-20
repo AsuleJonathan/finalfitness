@@ -25,4 +25,4 @@
       command: "java -jar /opt/{{ FitnessTracking }}/{{ FitnessTracking }}"
       async: 60
       poll: 0
-      ignore_errors: yes
+     
