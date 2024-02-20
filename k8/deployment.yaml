@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fitness-tracking-deployment
+  labels:
+    app: fitness-tracking
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fitness-tracking
+  template:
+    metadata:
+      labels:
+        app: fitness-tracking
+    spec:
+      containers:
+      - name: fitness-tracking-container
+        image: your-dockerhub-asulejona/fitness-tracking:latest
+        ports:
+        - containerPort: 8081

@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  fitness-tracking:
+    image: your-dockerhub-asulejona/fitness-tracking:latest
+    ports:
+      - "8081:8081"
+    restart: always
+
+networks:
+  default:
+    external:
+      name: bridge
