@@ -26,7 +26,6 @@ RUN mvn clean install -DskipTests -X
 
 FROM quay.io/wildfly/wildfly:26.1.3.Final-jdk17 AS deploy
 
-RUN rm /opt/jboss/wildfly/standalone/configuration/standalone.xml
 
 COPY --from=build /app/target/FitnessTracking.war /opt/jboss/wildfly/standalone/deployments/
 
