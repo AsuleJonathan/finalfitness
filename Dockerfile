@@ -8,7 +8,7 @@
 # COPY target/FitnessTracking.war /app
 
 # # Expose the port your Java web application runs on
-# EXPOSE 8081
+# EXPOSE 8080
 
 # # Command to run your Java web application
 # CMD ["java", "-jar", "FitnessTracking.war"]
