@@ -29,8 +29,6 @@ FROM quay.io/wildfly/wildfly:26.1.3.Final-jdk17 AS deploy
 
 COPY --from=build /app/target/FitnessTracking.war /opt/jboss/wildfly/standalone/deployments/
 
-
-
-EXPOSE 8081
+EXPOSE 8080
 
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
