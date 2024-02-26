@@ -1,28 +1,67 @@
----
-- name: Deploy Java Web Application
-  hosts: your_target_hosts
+- name: Install Kubernetes dependencies
+  hosts: all
   become: true
-  vars:
-    app_name: "FitnessTracking"
-    app_version: "1.0"
-    app_port: 8080
-    app_war_file: "FitnessTracking.war"
-
   tasks:
-    - name: Ensure Java is installed
-      become: true
+    - name: Install required system packages
       apt:
-        name: openjdk-11-jdk
+        name: "{{ item }}"
+        state: latest
+        update_cache: yes
+      loop:
+        - "apt-transport-https"
+        - "ca-certificates"
+        - "curl"
+        - "software-properties-common"
+        - "python3-pip"
+        - "virtualenv"
+        - "python3-setuptools"
+      become: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
         state: present
-      tags: [java]
+      become: true
 
-    - name: Copy WAR file to the server
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+      become: true
+
+    - name: Install Docker and Docker-Compose
+      apt:
+        pkg:
+          - docker
+          - docker-ce
+          - docker-compose
+        state: latest
+        update_cache: yes
+      become: true
+      
+    - name: Add current user to the docker group
+      become: true
+      shell: usermod -aG docker $USER
+
+    # - name: Switch to the docker group
+    #   become: true
+    #   shell: newgrp docker
+
+
+    - name: Create directory
+      file:
+        path: /jonathan/fitnessTracking/
+        state: directory
+        recurse: yes
+        owner: jonathan
+
+    - name: Copy Docker Compose File
       copy:
-        src: /path/to/your/FitnessTracking.war
-        dest: /opt/{{ app_name }}/{{ app_war_file }}
+        src: ./docker-compose.yaml
+        dest: fitnessTracking/
 
-    - name: Start the Java application
-      command: "java -jar /opt/{{ FitnessTracking }}/{{ FitnessTracking }}"
-      async: 60
-      poll: 0
-     
+    - name: Run Docker Container
+      shell: |
+        docker compose -f fitnessTracking/docker-compose.yaml pull
+        docker compose -f fitnessTracking/docker-compose.yaml up -d
+
